@@ -14,7 +14,11 @@ export async function generateMetadata({
   return { title: product ? `${product.name} | پلنتی` : 'محصول | پلنتی' };
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const { id } = await params;
   const product = getProduct(id);
   if (!product) notFound();

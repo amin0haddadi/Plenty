@@ -52,56 +52,70 @@ export function useShop() {
   return {
     ...state,
     setCart(cart: CartLine[]) {
-      update((current) => ({ ...current, cart }));
+      update(current => ({ ...current, cart }));
     },
     addToCart(productId: string, qty = 1) {
-      update((current) => {
-        const existing = current.cart.find((line) => line.productId === productId);
+      update(current => {
+        const existing = current.cart.find(
+          line => line.productId === productId,
+        );
         const cart = existing
-          ? current.cart.map((line) =>
-              line.productId === productId ? { ...line, qty: line.qty + qty } : line,
+          ? current.cart.map(line =>
+              line.productId === productId
+                ? { ...line, qty: line.qty + qty }
+                : line,
             )
           : [...current.cart, { productId, qty }];
         return { ...current, cart };
       });
     },
     setQty(productId: string, qty: number) {
-      update((current) => ({
+      update(current => ({
         ...current,
         cart:
           qty <= 0
-            ? current.cart.filter((line) => line.productId !== productId)
-            : current.cart.map((line) => (line.productId === productId ? { ...line, qty } : line)),
+            ? current.cart.filter(line => line.productId !== productId)
+            : current.cart.map(line =>
+                line.productId === productId ? { ...line, qty } : line,
+              ),
       }));
     },
     clearCart() {
-      update((current) => ({ ...current, cart: [] }));
+      update(current => ({ ...current, cart: [] }));
     },
     saveAddress(address: Address) {
-      update((current) => {
-        const addresses = current.addresses.some((item) => item.id === address.id)
-          ? current.addresses.map((item) => (item.id === address.id ? address : item))
+      update(current => {
+        const addresses = current.addresses.some(item => item.id === address.id)
+          ? current.addresses.map(item =>
+              item.id === address.id ? address : item,
+            )
           : [...current.addresses, address];
         const normalized = address.isDefault
-          ? addresses.map((item) => ({ ...item, isDefault: item.id === address.id }))
+          ? addresses.map(item => ({
+              ...item,
+              isDefault: item.id === address.id,
+            }))
           : addresses;
         return { ...current, addresses: normalized };
       });
     },
     removeAddress(id: string) {
-      update((current) => ({
+      update(current => ({
         ...current,
-        addresses: current.addresses.filter((item) => item.id !== id),
+        addresses: current.addresses.filter(item => item.id !== id),
       }));
     },
     setDefaultAddress(id: string) {
-      update((current) => ({
+      update(current => ({
         ...current,
-        addresses: current.addresses.map((item) => ({ ...item, isDefault: item.id === id })),
+        addresses: current.addresses.map(item => ({
+          ...item,
+          isDefault: item.id === id,
+        })),
       }));
     },
     placeOrder(order: Order) {
-      update((current) => ({
+      update(current => ({
         ...current,
         orders: [order, ...current.orders],
         cart: [],

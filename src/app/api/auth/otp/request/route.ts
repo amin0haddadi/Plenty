@@ -8,11 +8,18 @@ export async function POST(request: Request) {
   const phone = normalizeIranPhone(body.phone ?? '');
 
   if (!isValidIranPhone(phone)) {
-    return NextResponse.json({ message: 'شماره موبایل معتبر وارد کنید' }, { status: 400 });
+    return NextResponse.json(
+      { message: 'شماره موبایل معتبر وارد کنید' },
+      { status: 400 },
+    );
   }
 
   const response = NextResponse.json({ ok: true });
-  response.cookies.set(OTP_PHONE_COOKIE, phone, { httpOnly: true, path: '/', maxAge: 60 * 10 });
+  response.cookies.set(OTP_PHONE_COOKIE, phone, {
+    httpOnly: true,
+    path: '/',
+    maxAge: 60 * 10,
+  });
   if (body.name?.trim()) {
     response.cookies.set(OTP_NAME_COOKIE, body.name.trim(), {
       httpOnly: true,

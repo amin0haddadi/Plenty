@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 };
 
 export default function LoginPage() {
-  return <PhoneForm mode="login" />;
+  return <PhoneForm mode='login' />;
 }

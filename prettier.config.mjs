@@ -1,0 +1,41 @@
+/** @type {import('prettier').Config} */
+const config = {
+  printWidth: 80,
+  tabWidth: 2,
+  singleQuote: true,
+  trailingComma: 'all',
+  arrowParens: 'avoid',
+  bracketSpacing: true,
+  useTabs: false,
+  endOfLine: 'auto',
+  singleAttributePerLine: false,
+  bracketSameLine: false,
+  jsxSingleQuote: true,
+  quoteProps: 'as-needed',
+  semi: true,
+  plugins: [
+    '@ianvs/prettier-plugin-sort-imports',
+    'prettier-plugin-tailwindcss',
+  ],
+  tailwindStylesheet: './src/app/globals.css',
+  importOrder: [
+    '<BUILTIN_MODULES>',
+    '',
+    '^((react-dom|react)/(.*)$)|^((react-dom|react)$)',
+    '',
+    '^(next/(.*)$)|^(next$)',
+    '',
+    '<THIRD_PARTY_MODULES>',
+    '',
+    '^(@/(.*)$)',
+    '',
+    '^(([.]{1,2})/((?!.*(.css)$).*)$)',
+    '',
+    '^(([.]{1,2})/(.*)(.css)$)',
+  ],
+  importOrderParserPlugins: ['typescript', 'jsx'],
+  importOrderTypeScriptVersion: '5.0.0',
+  importOrderCaseSensitive: false,
+};
+
+export default config;

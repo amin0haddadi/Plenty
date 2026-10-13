@@ -2,11 +2,11 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 import {
+  encodeSession,
   OTP_CODE,
   OTP_NAME_COOKIE,
   OTP_PHONE_COOKIE,
   SESSION_COOKIE,
-  encodeSession,
 } from '@/lib/session';
 
 export async function POST(request: Request) {
@@ -16,11 +16,17 @@ export async function POST(request: Request) {
   const name = jar.get(OTP_NAME_COOKIE)?.value || 'کاربر پلنتی';
 
   if (!phone) {
-    return NextResponse.json({ message: 'ابتدا شماره موبایل را وارد کنید' }, { status: 400 });
+    return NextResponse.json(
+      { message: 'ابتدا شماره موبایل را وارد کنید' },
+      { status: 400 },
+    );
   }
 
   if ((body.code ?? '').trim() !== OTP_CODE) {
-    return NextResponse.json({ message: 'کد تأیید نادرست است' }, { status: 400 });
+    return NextResponse.json(
+      { message: 'کد تأیید نادرست است' },
+      { status: 400 },
+    );
   }
 
   const response = NextResponse.json({ ok: true });

@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 import { CheckoutContent } from '@/features/checkout/components/checkout-content';
-import { SESSION_COOKIE, decodeSession } from '@/lib/session';
+import { decodeSession, SESSION_COOKIE } from '@/lib/session';
 
 export const metadata: Metadata = { title: 'تکمیل سفارش | پلنتی' };
 

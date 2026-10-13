@@ -1,9 +1,9 @@
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-import { BottomNav } from "@/components/layout/bottom-nav";
-import { PhoneFrame } from "@/components/layout/phone-frame";
-import { SESSION_COOKIE, decodeSession } from "@/lib/session";
+import { BottomNav } from '@/components/layout/bottom-nav';
+import { PhoneFrame } from '@/components/layout/phone-frame';
+import { decodeSession, SESSION_COOKIE } from '@/lib/session';
 
 export default async function ShopLayout({
   children,
@@ -12,10 +12,10 @@ export default async function ShopLayout({
 }) {
   const jar = await cookies();
   const session = decodeSession(jar.get(SESSION_COOKIE)?.value);
-  if (!session) redirect("/welcome");
+  if (!session) redirect('/welcome');
 
   return (
-    <PhoneFrame className="bg-cream" footer={<BottomNav />}>
+    <PhoneFrame className='bg-cream' footer={<BottomNav />}>
       {children}
     </PhoneFrame>
   );

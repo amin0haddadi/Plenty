@@ -1,7 +1,9 @@
 'use client';
 
 import { useRef } from 'react';
+
 import { useRouter } from 'next/navigation';
+
 import { Controller, useForm } from 'react-hook-form';
 
 import { Button, TextLink } from '@/components/ui/button';
@@ -45,11 +47,11 @@ export function OtpContent() {
     <AuthForm
       formRef={formRef}
       onSubmit={handleSubmit(onSubmit)}
-      title="کد تأیید"
-      description="کد ۱۲۳۴ را وارد کنید تا وارد اپ شوید"
+      title='کد تأیید'
+      description='کد ۱۲۳۴ را وارد کنید تا وارد اپ شوید'
     >
-      <div className="mt-6 grid grid-cols-4 gap-3" dir="ltr">
-        {([0, 1, 2, 3] as const).map((index) => (
+      <div className='mt-6 grid grid-cols-4 gap-3' dir='ltr'>
+        {([0, 1, 2, 3] as const).map(index => (
           <Controller
             key={index}
             control={control}
@@ -60,14 +62,14 @@ export function OtpContent() {
             }}
             render={({ field }) => (
               <input
-                inputMode="numeric"
-                ref={(node) => {
+                inputMode='numeric'
+                ref={node => {
                   field.ref(node);
                   inputs.current[index] = node;
                 }}
                 value={field.value}
                 onBlur={field.onBlur}
-                onChange={(event) => {
+                onChange={event => {
                   const next = event.target.value.replace(/\D/g, '').slice(-1);
                   field.onChange(next);
                   if (!next) return;
@@ -75,12 +77,14 @@ export function OtpContent() {
                     inputs.current[index + 1]?.focus();
                     return;
                   }
-                  const digits = getValues('digits').map((digit, i) => (i === index ? next : digit));
-                  if (digits.every((digit) => /^\d$/.test(digit))) {
+                  const digits = getValues('digits').map((digit, i) =>
+                    i === index ? next : digit,
+                  );
+                  if (digits.every(digit => /^\d$/.test(digit))) {
                     formRef.current?.requestSubmit();
                   }
                 }}
-                onKeyDown={(event) => {
+                onKeyDown={event => {
                   if (event.key === 'Backspace' && !field.value && index > 0) {
                     inputs.current[index - 1]?.focus();
                   }
@@ -92,14 +96,19 @@ export function OtpContent() {
         ))}
       </div>
       {errors.digits || errors.root ? (
-        <p className="mt-3 text-center text-xs text-danger">
+        <p className='mt-3 text-center text-xs text-danger'>
           {errors.root?.message ?? 'کد ۴ رقمی را وارد کنید'}
         </p>
       ) : null}
-      <Button type="submit" variant="block" disabled={isSubmitting} className="mt-6">
+      <Button
+        type='submit'
+        variant='block'
+        disabled={isSubmitting}
+        className='mt-6'
+      >
         {isSubmitting ? 'در حال بررسی…' : 'ورود به اپ'}
       </Button>
-      <TextLink href="/login" tone="black" className="mt-4 block text-center">
+      <TextLink href='/login' tone='black' className='mt-4 block text-center'>
         تغییر شماره موبایل
       </TextLink>
     </AuthForm>

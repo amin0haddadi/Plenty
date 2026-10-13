@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 export function StickyAction({
   children,
@@ -9,7 +9,7 @@ export function StickyAction({
 }) {
   return (
     <div
-      className={`sticky bottom-[4.75rem] z-20 mt-auto bg-transparent px-5 pt-3 pb-3 ${className ?? ""}`}
+      className={`sticky bottom-19 z-20 mt-auto bg-transparent px-5 py-3 ${className ?? ''}`}
     >
       {children}
     </div>

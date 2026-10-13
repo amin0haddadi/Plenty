@@ -1,6 +1,6 @@
 import type { Product } from '@/types';
 
-export const products: Product[] = [
+const products: Product[] = [
   {
     id: 'nectarine',
     name: 'شلیل',
@@ -72,5 +72,7 @@ export const categories = [
 ];
 
 export function getProduct(id: string) {
-  return products.find((product) => product.id === id);
+  return products.find(product => product.id === id);
 }
+
+export { products };
