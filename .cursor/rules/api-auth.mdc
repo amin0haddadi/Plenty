@@ -1,0 +1,29 @@
+---
+description: Phone OTP session and local shop state for پلنتی
+globs: src/proxy.ts,src/app/api/**/*,src/lib/session.ts,src/lib/local-shop.ts,src/features/auth/**/*
+alwaysApply: false
+---
+
+# Auth & Shop State
+
+## Login gate
+- `src/proxy.ts` sends visitors without a session to `/welcome`
+- A session on `/welcome`, `/login`, `/register`, or `/otp` redirects to `/`
+- Matcher skips `api`, `_next`, `products`, and files with an extension
+
+## OTP
+- `POST /api/auth/otp/request` with `{ phone, name? }`. Phone must match `09` + 9 digits (`src/lib/phone.ts`)
+- Stores `plenty_otp_phone` and optional `plenty_otp_name` for 10 minutes
+- `POST /api/auth/otp/verify` with `{ code }`. Demo code is `1234` (`OTP_CODE`)
+- Success sets httpOnly `plenty_session` for 14 days: JSON `{ name, phone }`
+- Login without a name uses «کاربر پلنتی»
+- `POST /api/auth/logout` clears the session. The account screen also clears `plenty-shop`
+
+## Do not
+- Put the session in `localStorage` or call `Buffer` inside the proxy
+- Add NextAuth, refresh tokens, or a remote API unless asked
+- Change the demo code or cookie names without updating both the routes and `src/lib/session.ts`
+
+## Orders
+- `placeOrder` writes to `plenty-shop` and clears the cart
+- New orders start as `waiting_courier` (در انتظار پیک), id `KH-#####`

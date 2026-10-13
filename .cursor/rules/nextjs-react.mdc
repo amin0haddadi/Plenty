@@ -1,0 +1,42 @@
+---
+description: Next.js App Router and React conventions for پلنتی
+globs: src/**/*.{tsx,ts}
+alwaysApply: false
+---
+
+# Next.js & React
+
+## Structure
+- Auth routes: `src/app/welcome`, `login`, `register`, `otp`
+- Shop routes: `src/app/(shop)/` — home, categories, products, cart, checkout, orders, account, addresses
+- Features: `src/features/<domain>/components/`
+- Shared chrome: `src/components/layout/`
+- Catalog and status labels: `src/data/`
+- Types: `src/types/`
+- Prefer Server Components. Add `"use client"` only for state, events, or `localStorage`
+
+## Styling
+- Tailwind v4 tokens in `src/app/globals.css`: `cream`, `leaf`, `fresh`, `orange`, `muted`, `line`, `chip`, `danger`
+- UI text and titles both use Estedad (`font-sans` and `font-display`)
+- Use `next/image` for product photos in `public/products/`
+- Imports use `@/`
+
+## Data
+- Products come from `src/data/products.ts` (`getProduct(id)`)
+- Money and Persian digits: `src/lib/format.ts`
+- Cart math and shipping: `src/lib/commerce.ts`
+- Browser shop state: `useShop()` in `src/lib/local-shop.ts`
+
+## Forms
+- Use React Hook Form (`useForm`, `register`, `handleSubmit`) for login, register, OTP, and address forms
+- Field errors come from `formState.errors`. Server errors use `setError('root', { message })`
+- Do not keep a separate `useState` copy of form fields
+
+## UI
+- Shared controls live in `src/components/ui/` (`Button`, `ButtonLink`, `TextLink`, `QuantityStepper`, `ProductCard`, `EmptyState`)
+- Actions use `Button`. Navigation that looks like a button uses `ButtonLink`
+- In-app navigation uses `next/link`. Do not use `<a>` for routes inside the app
+
+## Layout
+- Root `layout.tsx` sets `lang`, `dir`, fonts, and default metadata
+- Do not wrap the root layout in another phone frame; auth and shop add `PhoneFrame` themselves

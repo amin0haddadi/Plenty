@@ -1,0 +1,25 @@
+---
+description: Persian grocery copy, bottom nav, and shipping language
+globs: src/components/layout/**/*,src/app/**/*.tsx,src/features/**/*,src/config/brand.ts,src/data/**/*
+alwaysApply: false
+---
+
+# Content & Navigation
+
+## Language
+- User-facing text is Persian
+- Tone: fresh and plain, like a neighborhood grocery. Not luxury editorial, not a multi-seller بازارچه
+- Say میوه، سبزی، سبد، سفارش، آدرس. Do not say فروشنده or بازارچه
+
+## Navigation
+- Customer tabs are the five links in `bottom-nav.tsx`: `/`, `/categories`, `/cart`, `/orders`, `/account`
+- Addresses are reached from حساب, not from the tab bar
+- Do not link to a route that has no `page.tsx`
+
+## Shipping copy
+- Above 300,000 toman: «ارسال رایگان برای این سفارش» and shipping label «رایگان»
+- Otherwise: «طبق قوانین», plus «تا ارسال رایگان» only when some amount is still remaining
+- Read the threshold from `FREE_SHIPPING_THRESHOLD` in `src/config/brand.ts`. Do not hardcode a second number
+
+## Status labels
+- Use `orderStatusLabel` in `src/data/order-status.ts`. Do not invent a second Persian label for the same status

@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+:root {
+  --cream: #faf8f2;
+  --leaf: #005312;
+  --fresh: #4f8f5b;
+  --orange: #f4a340;
+  --muted: #6b7a70;
+  --line: #e8e4dc;
+  --chip: #dcebd9;
+  --danger: hsl(0, 94%, 50%);
+}
+
+@theme inline {
+  --color-cream: var(--cream);
+  --color-leaf: var(--leaf);
+  --color-fresh: var(--fresh);
+  --color-orange: var(--orange);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-chip: var(--chip);
+  --color-danger: var(--danger);
+  --font-sans: var(--font-estedad);
+  --font-display: var(--font-estedad);
+}
+
+body {
+  color: var(--leaf);
+  font-family: var(--font-estedad), sans-serif;
+}
+
+button,
+input {
+  font-family: inherit;
+}

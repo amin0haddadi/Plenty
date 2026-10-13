@@ -1,0 +1,31 @@
+---
+description: Metadata and semantic HTML for the Persian grocery app
+globs: src/app/**/*.{tsx,ts},src/features/**/*.tsx,src/components/**/*.tsx
+alwaysApply: false
+---
+
+# Pages & Metadata
+
+## Always
+- Keep `page.tsx` as a Server Component and export `metadata` with a unique Persian title ending in `| پلنتی`
+- Root layout keeps `lang="fa"` and `dir="rtl"`
+- Product pages title from the product name
+- Decorative photos use `alt=""`. If an image conveys the product name with no nearby text, use a Persian `alt`
+
+## Semantic HTML
+- One `h1` per screen. Do not skip heading levels for styling
+- `button` for actions, `Link` for navigation
+- Forms use `form`, `label`, and `input`
+- Order and address cards can be `article`
+
+## Private flows
+- Do not add login, cart, checkout, account, or order pages to a public sitemap
+- Do not add `generatePageMetadata`, Open Graph assets, or `robots.ts` unless asked
+
+```tsx
+// ❌ BAD
+<div onClick={() => router.push('/cart')}>{name}</div>
+
+// ✅ GOOD
+<Link href={`/products/${product.id}`}>{product.name}</Link>
+```

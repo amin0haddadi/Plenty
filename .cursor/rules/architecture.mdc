@@ -1,0 +1,45 @@
+---
+description: Server pages and client feature components for the grocery app
+globs: src/app/**/page.tsx,src/features/**/*
+alwaysApply: false
+---
+
+# Component-Driven Architecture
+
+## Pages are Server Components
+- No `"use client"` in `page.tsx`
+- Export `metadata` from the page
+- Pages stay thin: read cookies or catalog data, then render one feature component
+- Missing products use `notFound()`
+
+## Feature components
+- Interactive UI lives in `src/features/<domain>/components/*-content.tsx`
+- Mark those files `"use client"`
+- Domains: `auth`, `home`, `category`, `product`, `cart`, `checkout`, `order`, `account`, `addresses`
+
+```
+src/app/(shop)/cart/page.tsx
+src/features/cart/components/cart-content.tsx
+
+src/app/(shop)/products/[id]/page.tsx
+src/features/product/components/product-detail-content.tsx
+```
+
+## Page template
+
+```tsx
+import type { Metadata } from 'next';
+import { CartContent } from '@/features/cart/components/cart-content';
+
+export const metadata: Metadata = { title: 'سبد خرید | پلنتی' };
+
+export default function CartPage() {
+  return <CartContent />;
+}
+```
+
+## Rules
+1. Never put `"use client"` on `page.tsx`
+2. One `h1` per screen; use `button` for actions and `Link` for navigation
+3. Shop pages render inside `(shop)/layout.tsx` (phone frame + bottom nav)
+4. Auth screens (`welcome`, `login`, `register`, `otp`) stay outside that layout

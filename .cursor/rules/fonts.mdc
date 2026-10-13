@@ -1,0 +1,22 @@
+---
+description: Estedad is the only app typeface, loaded from local files
+globs: src/app/layout.tsx,src/app/globals.css,public/fonts/**/*
+alwaysApply: false
+---
+
+# Fonts
+
+## Single typeface: Estedad
+- Config: `next/font/local` in `src/app/layout.tsx`
+- Files: `public/fonts/estedad/`
+  - `Estedad-Regular.ttf` (400)
+  - `Estedad-Medium.ttf` (500)
+  - `Estedad-SemiBold.ttf` (600)
+  - `Estedad-Bold.ttf` (700)
+- CSS variable: `--font-estedad`
+- `--font-sans` and `--font-display` both use Estedad
+
+## Do not
+- Add Vazirmatn, Noto Naskh, or a second display font
+- Load Estedad from a CDN or a `<link>` tag
+- Change the file paths without updating `layout.tsx`

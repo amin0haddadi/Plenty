@@ -1,0 +1,33 @@
+---
+description: پلنتی core project context — Persian grocery app constraints
+alwaysApply: true
+---
+
+# پلنتی — Project Rules
+
+## Identity
+- Persian RTL **grocery shop** (میوه‌های تازه تا در خانه), single vendor, not a marketplace
+- Brand: **پلنتی** — fresh, calm, cream and deep leaf. Source: `src/config/brand.ts`
+- Customer app only. Do not add admin or courier screens unless asked
+- UI copy is **Persian (fa)**; `<html lang="fa" dir="rtl">`
+
+## Access
+- Login first. No guest shopping
+- Public routes: `/welcome`, `/login`, `/register`, `/otp`
+- Everything else requires a session. Gate lives in `src/proxy.ts`
+
+## Shop rules
+- Free shipping only when the cart total is **above** `FREE_SHIPPING_THRESHOLD` (300,000 toman). At or below that, shipping label is «طبق قوانین»
+- Cart, addresses, and orders persist in the browser (`plenty-shop`), not on a server
+- Bottom nav is five tabs: خانه، دسته‌ها، سبد، سفارش‌ها، حساب (`src/components/layout/bottom-nav.tsx`)
+- Screens sit in a phone frame, max width 430px
+
+## Stack
+- Next.js 16 App Router, React 19, TypeScript, Tailwind v4, React Hook Form
+- Run with **Bun** (`bun dev`, `bun install`)
+- Do not add NextAuth, TanStack Query, shadcn, Sonner, or a Spring client unless asked
+
+## Do not
+- Port خانم‌خانوما (beauty marketplace, sellers) or other shop projects into this app
+- Commit `.env` or create git commits unless the user asks
+- Invent routes that are not under `src/app/`
