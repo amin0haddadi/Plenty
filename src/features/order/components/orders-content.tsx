@@ -5,9 +5,10 @@ import Link from 'next/link';
 import { ScreenHeader } from '@/components/layout/screen-header';
 import { ButtonLink } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/empty-state';
-import { orderStatusLabel } from '@/data/order-status';
 import { formatToman } from '@/lib/format';
 import { useShop } from '@/lib/local-shop';
+
+import { OrderHeading } from './order-heading';
 
 export function OrdersContent() {
   const shop = useShop();
@@ -27,22 +28,19 @@ export function OrdersContent() {
             <Link
               key={order.id}
               href={`/orders/${order.id}`}
-              className='block rounded-2xl bg-white p-4'
+              className='flex flex-col gap-3 rounded-2xl bg-white p-4'
             >
-              <div className='flex items-center justify-between'>
-                <span className='rounded-lg bg-chip px-2 py-1 text-xs'>
-                  {orderStatusLabel[order.status]}
-                </span>
-                <span className='font-semibold'>سفارش {order.id}</span>
-              </div>
-              <p className='mt-3 text-sm text-muted'>
+              <OrderHeading id={order.id} status={order.status} />
+              <p className='text-sm text-muted'>
                 {order.items[0]?.name}
                 {order.items.length > 1
                   ? ` + ${order.items.length - 1} قلم دیگر`
                   : ''}
               </p>
-              <p className='mt-2 font-bold'>{formatToman(order.total)}</p>
-              <p className='mt-3 text-sm text-fresh'>مشاهده سفارش</p>
+              <div className='flex items-center justify-between'>
+                <p className='font-bold'>{formatToman(order.total)}</p>
+                <p className='text-sm text-blue-400'>مشاهده سفارش</p>
+              </div>
             </Link>
           ))}
         </div>

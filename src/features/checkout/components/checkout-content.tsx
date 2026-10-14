@@ -27,29 +27,44 @@ function createOrderId() {
 export function CheckoutContent({ phone }: { phone: string }) {
   const router = useRouter();
   const shop = useShop();
-  const [open, setOpen] = useState(false);
+  const [sheet, setSheet] = useState<'picker' | 'form' | null>(null);
   const [editing, setEditing] = useState<Address | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const subtotal = cartSubtotal(shop.cart);
   const shipping = shippingFor(subtotal);
   const selected =
-    shop.addresses.find(item => item.isDefault) ?? shop.addresses[0];
+    shop.addresses.find(item => item.id === selectedId) ??
+    shop.addresses.find(item => item.isDefault) ??
+    shop.addresses[0];
   const lines = shop.cart
     .map(line => ({ ...line, product: getProduct(line.productId) }))
     .filter(line => line.product);
 
-  function close() {
-    setOpen(false);
+  function closeSheet() {
+    setSheet(null);
     setEditing(null);
   }
 
+  function openForm(address: Address | null = null) {
+    setEditing(address);
+    setSheet('form');
+  }
+
   function saveAddress(values: AddressFormValues) {
+    const id = editing?.id ?? crypto.randomUUID();
     shop.saveAddress({
-      id: editing?.id ?? crypto.randomUUID(),
+      id,
       ...values,
       phone,
       isDefault: editing?.isDefault ?? shop.addresses.length === 0,
     });
-    close();
+    setSelectedId(id);
+    closeSheet();
+  }
+
+  function pickAddress(id: string) {
+    setSelectedId(id);
+    closeSheet();
   }
 
   function pay() {
@@ -92,12 +107,10 @@ export function CheckoutContent({ phone }: { phone: string }) {
               </p>
             </div>
             <Button
+              type='button'
               variant='minusSm'
               aria-label='ویرایش'
-              onClick={() => {
-                setEditing(selected);
-                setOpen(true);
-              }}
+              onClick={() => openForm(selected)}
             >
               <LuPencil className='size-4' aria-hidden />
             </Button>
@@ -107,16 +120,20 @@ export function CheckoutContent({ phone }: { phone: string }) {
             آدرسی انتخاب نشده
           </div>
         )}
-        <Button
-          variant='outline'
-          onClick={() => {
-            setEditing(null);
-            setOpen(true);
-          }}
-          className='mt-3'
-        >
-          + افزودن آدرس جدید
-        </Button>
+        <div className='mt-3 flex flex-row gap-2'>
+          {shop.addresses.length > 0 ? (
+            <Button variant='outline' onClick={() => setSheet('picker')}>
+              تغییر آدرس
+            </Button>
+          ) : null}
+          <Button
+            variant='outline'
+            className='w-full bg-chip!'
+            onClick={() => openForm(null)}
+          >
+            + افزودن آدرس جدید
+          </Button>
+        </div>
       </section>
 
       <section className='mt-5 px-4'>
@@ -163,8 +180,51 @@ export function CheckoutContent({ phone }: { phone: string }) {
         </Button>
       </div>
 
-      {open ? (
-        <BottomSheet onClose={close}>
+      {sheet === 'picker' ? (
+        <BottomSheet onClose={closeSheet}>
+          <div className='w-full max-w-[430px] rounded-t-3xl bg-white p-5'>
+            <h2 className='mb-4 text-center font-display text-lg font-bold'>
+              انتخاب آدرس
+            </h2>
+            <div className='space-y-3'>
+              {shop.addresses.map(address => {
+                const isSelected = selected?.id === address.id;
+                return (
+                  <button
+                    key={address.id}
+                    type='button'
+                    onClick={() => pickAddress(address.id)}
+                    className={`w-full rounded-2xl border p-4 text-right ${
+                      isSelected
+                        ? 'border-fresh bg-chip/40'
+                        : 'border-line bg-cream'
+                    }`}
+                  >
+                    <p className='font-semibold'>{address.title}</p>
+                    <p className='mt-1 text-sm text-muted'>
+                      {address.city}، {address.line}
+                    </p>
+                    <p className='text-sm text-muted'>
+                      پلاک {address.plaque}
+                      {address.unit ? `، واحد ${address.unit}` : ''}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
+            <Button
+              variant='outline'
+              className='mt-4'
+              onClick={() => openForm(null)}
+            >
+              + افزودن آدرس جدید
+            </Button>
+          </div>
+        </BottomSheet>
+      ) : null}
+
+      {sheet === 'form' ? (
+        <BottomSheet onClose={closeSheet}>
           <AddressForm
             key={editing?.id ?? 'new'}
             phone={phone}

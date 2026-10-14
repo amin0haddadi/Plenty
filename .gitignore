@@ -30,7 +30,7 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-git status# other package managers (this app is Bun-only)
+# other package managers (this app is Bun-only)
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
