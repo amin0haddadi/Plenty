@@ -48,9 +48,7 @@ export function ProductDetailContent({ product }: { product: Product }) {
           </p>
         </div>
 
-        <p className='mt-4 text-sm/10 text-muted'>
-          {product.description}
-        </p>
+        <p className='mt-4 text-sm/10 text-muted'>{product.description}</p>
         <div className='my-4 h-px bg-line' />
         <p
           className={`text-[13px] font-semibold ${product.inStock ? 'text-leaf' : 'text-[#c5cbc3]'}`}
