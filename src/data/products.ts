@@ -1,4 +1,5 @@
 import type { Product } from '@/types';
+import { fetchCategoriesFromApi, fetchProductFromApi, fetchProductsFromApi } from '@/lib/api';
 
 const products: Product[] = [
   {
@@ -61,6 +62,16 @@ const products: Product[] = [
     category: 'citrus',
     description: 'پرتقال آب‌گیری. فعلاً موجود نیست.',
   },
+  {
+    id: 'watermelon',
+    name: 'هندوانه',
+    unit: 'عدد',
+    price: 150_000,
+    image: '/products/Watermelon.jpg',
+    inStock: true,
+    category: 'summer',
+    description: 'هندوانه قرمز و شیرین، دست‌چین تازه و خنک.',
+  },
 ];
 
 export const categories = [
@@ -71,8 +82,45 @@ export const categories = [
   { id: 'picked', name: 'دست‌چین امروز', image: '/products/hero.jpg' },
 ];
 
-export function getProduct(id: string) {
+export function getProduct(id: string): Product | undefined {
   return products.find(product => product.id === id);
+}
+
+export async function getProductAsync(id: string): Promise<Product | undefined> {
+  try {
+    const apiProduct = await fetchProductFromApi(id);
+    if (apiProduct) return apiProduct;
+  } catch (err) {
+    console.warn(`Failed to fetch product ${id} from API, using fallback:`, err);
+  }
+  return getProduct(id);
+}
+
+export async function getProductsAsync(category?: string): Promise<Product[]> {
+  try {
+    const apiProducts = await fetchProductsFromApi(category ? { category } : undefined);
+    if (apiProducts.length > 0) return apiProducts;
+  } catch (err) {
+    console.warn('Failed to fetch products from API, using fallback:', err);
+  }
+
+  if (category === 'picked') {
+    return products.filter(p => p.inStock);
+  }
+  if (category) {
+    return products.filter(p => p.category === category);
+  }
+  return products;
+}
+
+export async function getCategoriesAsync() {
+  try {
+    const apiCats = await fetchCategoriesFromApi();
+    if (apiCats.length > 0) return apiCats;
+  } catch (err) {
+    console.warn('Failed to fetch categories from API, using fallback:', err);
+  }
+  return categories;
 }
 
 export { products };

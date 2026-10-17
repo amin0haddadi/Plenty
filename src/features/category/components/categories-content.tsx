@@ -2,9 +2,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { ScreenHeader } from '@/components/layout/screen-header';
-import { categories } from '@/data/products';
+import { categories as fallbackCategories } from '@/data/products';
 
-export function CategoriesContent() {
+type CategoryItem = {
+  id: string;
+  name: string;
+  image: string;
+};
+
+export function CategoriesContent({
+  categories = fallbackCategories,
+}: {
+  categories?: CategoryItem[];
+}) {
   return (
     <div>
       <ScreenHeader title='دسته‌ها' />

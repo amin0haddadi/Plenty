@@ -1,15 +1,29 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import Image from 'next/image';
 
 import { ButtonLink } from '@/components/ui/button';
 import { ProductCard } from '@/components/ui/product-card';
 import { ProductCardAction } from '@/components/ui/product-card-action';
-import { products } from '@/data/products';
+import { getProductsAsync, products as fallbackProducts } from '@/data/products';
 import { formatToman } from '@/lib/format';
+import type { Product } from '@/types';
 
 export function HomeContent() {
-  const featured = products.filter(product => product.inStock).slice(0, 4);
+  const [featured, setFeatured] = useState<Product[]>(() =>
+    fallbackProducts.filter(product => product.inStock).slice(0, 4),
+  );
+
+  useEffect(() => {
+    getProductsAsync().then(fetched => {
+      const available = fetched.filter(product => product.inStock).slice(0, 4);
+      if (available.length > 0) {
+        setFeatured(available);
+      }
+    });
+  }, []);
 
   return (
     <div>

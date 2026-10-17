@@ -89,7 +89,7 @@ export function CheckoutContent({ phone }: { phone: string }) {
       phone: selected.phone,
       eta: 'امروز ۱۹ تا ۲۰',
     };
-    shop.placeOrder(order);
+    shop.placeOrder(order, selected.id);
     router.push(`/order-confirmed?id=${order.id}`);
   }
 

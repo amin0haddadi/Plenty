@@ -1,24 +1,48 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+
 import { useSearchParams } from 'next/navigation';
 
 import { ScreenHeader } from '@/components/layout/screen-header';
 import { ProductCard } from '@/components/ui/product-card';
 import { ProductCardAction } from '@/components/ui/product-card-action';
-import { categories, products } from '@/data/products';
+import {
+  categories as fallbackCategories,
+  getCategoriesAsync,
+  getProductsAsync,
+  products as fallbackProducts,
+} from '@/data/products';
 import { formatToman } from '@/lib/format';
+import type { Product } from '@/types';
 
 export function ProductsContent() {
   const params = useSearchParams();
   const category = params.get('category');
-  const list =
-    category === 'picked'
-      ? products.filter(product => product.inStock)
-      : category
-        ? products.filter(product => product.category === category)
-        : products;
+
+  const [categoriesList, setCategoriesList] = useState(fallbackCategories);
+  const [list, setList] = useState<Product[]>(() => {
+    if (category === 'picked') {
+      return fallbackProducts.filter(product => product.inStock);
+    }
+    if (category) {
+      return fallbackProducts.filter(product => product.category === category);
+    }
+    return fallbackProducts;
+  });
+
+  useEffect(() => {
+    getCategoriesAsync().then(cats => setCategoriesList(cats));
+  }, []);
+
+  useEffect(() => {
+    getProductsAsync(category ?? undefined).then(fetched => {
+      setList(fetched);
+    });
+  }, [category]);
+
   const title =
-    categories.find(item => item.id === category)?.name ?? 'محصولات';
+    categoriesList.find(item => item.id === category)?.name ?? 'محصولات';
 
   return (
     <div>

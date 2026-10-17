@@ -94,7 +94,7 @@ export function PhoneForm({ mode }: { mode: 'login' | 'register' }) {
         <p className='mt-2 text-xs text-danger'>{errors.root.message}</p>
       ) : null}
       <p className='mt-4 text-center text-xs text-black/70'>
-        کد تأیید پیامک می‌شود. کد آزمایشی ۱۲۳۴
+        کد تأیید پیامک می‌شود. کد آزمایشی: ۱۲۳۴۵
       </p>
       <Button
         type='submit'

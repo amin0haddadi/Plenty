@@ -18,6 +18,7 @@ export function AccountContent({ user }: { user: SessionUser }) {
 
   async function logout() {
     window.localStorage.removeItem('plenty-shop');
+    window.localStorage.removeItem('plenty_token');
     await fetch('/api/auth/logout', { method: 'POST' });
     router.push('/welcome');
     router.refresh();

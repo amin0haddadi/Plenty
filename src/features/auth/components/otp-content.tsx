@@ -23,21 +23,35 @@ export function OtpContent() {
     setError,
     formState: { errors, isSubmitting },
   } = useForm<OtpFormValues>({
-    defaultValues: { digits: ['', '', '', ''] },
+    defaultValues: { digits: ['', '', '', '', ''] },
   });
   const formRef = useRef<HTMLFormElement>(null);
   const inputs = useRef<Array<HTMLInputElement | null>>([]);
 
   async function onSubmit(values: OtpFormValues) {
+    const guestToken =
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem('plenty_guest_token')
+        : undefined;
+
     const response = await fetch('/api/auth/otp/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code: values.digits.join('') }),
+      body: JSON.stringify({
+        code: values.digits.join(''),
+        guest_token: guestToken,
+      }),
     });
     if (!response.ok) {
       const body = (await response.json()) as { message?: string };
       setError('root', { message: body.message ?? 'کد نادرست است' });
       return;
+    }
+    const body = (await response.json()) as {
+      user?: { token?: string };
+    };
+    if (body.user?.token && typeof window !== 'undefined') {
+      window.localStorage.setItem('plenty_token', body.user.token);
     }
     router.push('/');
     router.refresh();
@@ -48,17 +62,17 @@ export function OtpContent() {
       formRef={formRef}
       onSubmit={handleSubmit(onSubmit)}
       title='کد تأیید'
-      description='کد ۱۲۳۴ را وارد کنید تا وارد اپ شوید'
+      description='کد پیامک‌شده را وارد کنید (کد آزمایشی: ۱۲۳۴۵)'
     >
-      <div className='mt-6 grid grid-cols-4 gap-3' dir='ltr'>
-        {([0, 1, 2, 3] as const).map(index => (
+      <div className='mt-6 grid grid-cols-5 gap-2' dir='ltr'>
+        {([0, 1, 2, 3, 4] as const).map(index => (
           <Controller
             key={index}
             control={control}
             name={`digits.${index}`}
             rules={{
-              required: 'کد ۴ رقمی را وارد کنید',
-              pattern: { value: /^\d$/, message: 'کد ۴ رقمی را وارد کنید' },
+              required: 'کد ۵ رقمی را وارد کنید',
+              pattern: { value: /^\d$/, message: 'کد ۵ رقمی را وارد کنید' },
             }}
             render={({ field }) => (
               <input
@@ -73,7 +87,7 @@ export function OtpContent() {
                   const next = event.target.value.replace(/\D/g, '').slice(-1);
                   field.onChange(next);
                   if (!next) return;
-                  if (index < 3) {
+                  if (index < 4) {
                     inputs.current[index + 1]?.focus();
                     return;
                   }
@@ -97,7 +111,7 @@ export function OtpContent() {
       </div>
       {errors.digits || errors.root ? (
         <p className='mt-3 text-center text-xs text-danger'>
-          {errors.root?.message ?? 'کد ۴ رقمی را وارد کنید'}
+          {errors.root?.message ?? 'کد ۵ رقمی را وارد کنید'}
         </p>
       ) : null}
       <Button

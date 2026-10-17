@@ -1,11 +1,13 @@
 const SESSION_COOKIE = 'plenty_session';
 const OTP_PHONE_COOKIE = 'plenty_otp_phone';
 const OTP_NAME_COOKIE = 'plenty_otp_name';
-const OTP_CODE = '1234';
+const OTP_CODE = '12345';
 
 type SessionUser = {
+  id?: number;
   name: string;
   phone: string;
+  token?: string;
 };
 
 function encodeSession(user: SessionUser) {
